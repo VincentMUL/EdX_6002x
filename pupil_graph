@@ -1,0 +1,20 @@
+digraph {
+	ABC
+	ACB
+	BAC
+	BCA
+	CAB
+	CBA
+	ABC -> BAC
+	ABC -> ACB
+	ACB -> CAB
+	ACB -> ABC
+	BAC -> ABC
+	BAC -> BCA
+	BCA -> CBA
+	BCA -> BAC
+	CAB -> ACB
+	CAB -> CBA
+	CBA -> BCA
+	CBA -> CAB
+}
