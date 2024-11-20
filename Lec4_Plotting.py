@@ -264,9 +264,9 @@ def displayRetireWMonthsRates(monthlies, rates, terms):
 
 displayRetireWMonthlies([90, 200, 500, 750, 1000], 0.05, 25*12)
 
-displayRetireWRates(500, [0.03, 0.05, 0.07], 25*12)
+# displayRetireWRates(500, [0.03, 0.05, 0.07], 25*12)
 
-displayRetireWMonthsRates([500, 700, 900, 1100], [0.03, 0.05, 0.07], 40*12)
+# displayRetireWMonthsRates([500, 700, 900, 1100], [0.03, 0.05, 0.07], 40*12)
 #too much overlay, can change the scale to clarify the differences or be more careful
 
 def displayRetireWMonthsAndRates(monthlies, rates, terms):
@@ -290,7 +290,7 @@ def displayRetireWMonthsAndRates(monthlies, rates, terms):
             plt.legend()
     plt.show()
 
-displayRetireWMonthsAndRates([500, 700, 900, 1100], [0.03, 0.05, 0.07], 40*12)
+# displayRetireWMonthsAndRates([500, 700, 900, 1100], [0.03, 0.05, 0.07], 40*12)
 #color says the monthly savings and the style gives the interest rate/growth
 
 #easier seeing grouping of plots
