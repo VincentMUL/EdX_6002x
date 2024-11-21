@@ -87,8 +87,9 @@ def plotLocs(drunkKinds, numSteps, numTrials):
 #plots the ending locations and the average x and y distance
 #at the end from the origin
 
-random.seed(0)
-plotLocs((UsualDrunk, ColdDrunk), 10000, 1000)
+# random.seed(0)
+# plotLocs((UsualDrunk, ColdDrunk), 10000, 1000)
+
 #plot shows final location after a trial of 10000 steps
 #and there are 1000 trials for each type of drunk
 #radius UsualDrunk vs ColdDrunk is similar,
@@ -100,7 +101,7 @@ plotLocs((UsualDrunk, ColdDrunk), 10000, 1000)
 # Adding Wormholes to the field
 # Einstein-Rosen bridges
 
-def Oddfield(Field):
+class OddField(Field):
     def __init__(self, numHoles = 1000, xRange = 100, yRange = 100):
         Field.__init__(self)
         self.wormholes = {}#dictionary of wormholes; maps locations to locations
@@ -111,11 +112,56 @@ def Oddfield(Field):
             newX = random.randint(-xRange, xRange)
             newY = random.randint(-yRange, yRange)
             newLoc = Location(newX, newY)
-            self.wormholes[(x, y)] = newLoc#add wormhole to dictionary
+            self.wormholes[(x, y)] = newLoc #add wormhole to dictionary
 
     def moveDrunk(self, drunk):
         Field.moveDrunk(self, drunk)
-        x = self.getLoc(drunk).getX()
-        y = self.getLoc(drunk).getY()
-        if (x, y) in self.wormholes:
-            self.getLoc(drunk) = self.wormholes[(x, y)]
+        x = self.drunks[drunk].getX()
+        y = self.drunks[drunk].getY()
+        if (x, y) in self.wormholes:#if drunk is at a wormhole
+            self.drunks[drunk] = self.wormholes[(x, y)]#move drunk to other end of wormhole
+
+#instead of iterating over kinds of drunks, iterating over types of fields
+def traceWalk(fieldKinds, numSteps):
+    styleChoice = styleIterator(('b+', 'r^', 'ko'))
+    pylab.figure('traceWalk')#create a new figure
+    for fClass in fieldKinds:
+        d = UsualDrunk()
+        f = fClass()
+        f.addDrunk(d, Location(0, 0))
+        locs = []
+        for s in range(numSteps):
+            f.moveDrunk(d)
+            locs.append(f.getLoc(d))
+        xVals, yVals = [], []
+        for loc in locs:
+            xVals.append(loc.getX())
+            yVals.append(loc.getY())
+        curStyle = styleChoice.nextStyle()
+        pylab.plot(xVals, yVals, curStyle, label = fClass.__name__)
+    pylab.title('Spots Visited on Walk (' + str(numSteps) + ' steps)')
+    pylab.xlabel('Steps East/West of Origin')
+    pylab.ylabel('Steps North/South of Origin')
+    pylab.legend(loc = 'best')
+    pylab.show()
+
+random.seed(0)
+traceWalk((Field, OddField), 500)
+
+#SUMMARY of how to simmulate:
+#The point is not the simulation itself, but how they were built.
+#Three classes corresponding to domain-specific types: Field, Drunk, Location
+#Number of functions corresponding to; one trial, multiple trials and result reporting.
+#Created 2 subclasses of Drunk
+#Simulation had an argument of type class, so both subclasses of Drunk could be investigated.
+#Made a series of incremental changes to the simulation to investigate different questions.
+#This is a typical approach; get simple version working first, then elaborate 1 step at a time.
+#Introduced a weird subclass of Field; just to show how easy it is to add something
+#to the simulation, even if it seemed radically different.
+#This would have been hard to model analytically, but easy to model computationally.
+
+#NEXT is serious stochastic simulations;
+#Probabilistic thinking and understanding how much confidence we can have in
+#the results of a simulation.
+
+
