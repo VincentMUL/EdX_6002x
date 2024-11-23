@@ -439,3 +439,60 @@ class DDrunk(Drunk):
 # 	x = random.choice(nodes)
 # 	y = random.choice(nodes)
 # 	addEdge(x,y)
+
+# # Answer: graph (undirected graph) is impossible, because addEdge is directed, so it's a digraph (directed graph).
+
+# for i in range(len(nodes)):
+# 	x = random.choice(nodes)
+# 	y = random.choice(nodes)
+# 	addEdge(x,y)
+# 	addEdge(y,x)
+# # # Answer: graph (undirected graph)
+
+# for i in range(len(nodes)):
+# 	w = random.choice(nodes)
+# 	x = random.choice(nodes)
+# 	y = random.choice(nodes)
+# 	z = random.choice(nodes)
+# 	addEdge(w,x)
+# 	addEdge(x,y)
+# 	addEdge(y,z)
+# 	addEdge(z,w)
+# # Answer: loop or connected chain of nodes WRONG
+# Correct Answer:?
+
+# for x in nodes:
+# 	for y in nodes:
+# 		addEdge(x,y)
+# 		addEdge(y,x)
+# # Answer: complete graph or clique
+
+# The out degree of a node is the number of its neighbors, i.e. for a node x, 
+# its degree is the number edges, of the form (x, y_i), where y_i is some other node.
+# Which graph has the largest out degree per node?
+# Answer: complete graph or clique
+
+# Problem 7
+
+# Write a function that meets the specification below:
+
+def solveit(test):
+    """ test, a function that takes an int parameter and returns a Boolean
+        Assumes there exists an int, x, such that test(x) is True
+        Returns an int, x, with the smallest absolute value such that test(x) is True 
+        In case of ties, return any one of them. 
+    """
+    # IMPLEMENT THIS FUNCTION
+
+#### This test case prints 49 ####
+def f(x):
+    return (x+15)**0.5 + x**0.5 == 15
+print(solveit(f))
+
+#### This test case prints 0 ####
+def f(x):
+    return x == 0
+print(solveit(f))
+
+# You are not allowed to import anything. Do not leave any debugging print stataments. 
+# Click "See full output" to see the test cases passed/failed.
