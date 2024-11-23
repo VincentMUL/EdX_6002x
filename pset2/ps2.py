@@ -15,7 +15,7 @@ import pylab
 # If you get a "Bad magic number" ImportError, you are not using Python 3.5 
 
 # For Python 3.6:
-from ps2_verify_movement36 import testRobotMovement
+from ps2_verify_movement312 import testRobotMovement
 # If you get a "Bad magic number" ImportError, you are not using Python 3.6
 
 
@@ -201,7 +201,15 @@ class Robot(object):
         room:  a RectangularRoom object.
         speed: a float (speed > 0)
         """
-        raise NotImplementedError
+        # raise NotImplementedError
+        if speed <= 0:
+            raise ValueError("Speed must be greater than 0")
+
+        self.room = room
+        self.speed = speed
+        self.position = room.getRandomPosition()
+        self.direction = random.randint(0, 360)
+        room.cleanTileAtPosition(self.position)
 
     def getRobotPosition(self):
         """
@@ -209,7 +217,11 @@ class Robot(object):
 
         returns: a Position object giving the robot's position.
         """
-        raise NotImplementedError
+        # raise NotImplementedError
+        if not self.room.isPositionInRoom(self.position):
+            raise ValueError("Robot not in room")
+        return self.position
+
     
     def getRobotDirection(self):
         """
@@ -218,7 +230,8 @@ class Robot(object):
         returns: an integer d giving the direction of the robot as an angle in
         degrees, 0 <= d < 360.
         """
-        raise NotImplementedError
+        # raise NotImplementedError
+        return self.direction
 
     def setRobotPosition(self, position):
         """
@@ -226,7 +239,8 @@ class Robot(object):
 
         position: a Position object.
         """
-        raise NotImplementedError
+        # raise NotImplementedError
+        self.position = position
 
     def setRobotDirection(self, direction):
         """
@@ -234,7 +248,8 @@ class Robot(object):
 
         direction: integer representing an angle in degrees
         """
-        raise NotImplementedError
+        # raise NotImplementedError
+        self.direction = direction
 
     def updatePositionAndClean(self):
         """
@@ -245,6 +260,66 @@ class Robot(object):
         """
         raise NotImplementedError # don't change this!
 
+# # Test 1 Class creation
+        # Although Robot is an abstract class, we create instances of it for 
+        # the purposes of testing your code's correctness.
+        # robot = Robot(RectangularRoom(1,2), 1.0)
+
+# Test 2 test getRobotPosition
+#         robot = Robot(RectangularRoom(5,8), 1.0)
+#         robot.getRobotPosition()
+
+# Test 3 test getRobotDirection
+#         robot = Robot(RectangularRoom(5,8), 1.0)
+#         robot.getRobotDirection()
+
+# Test 4 test setRobotPosition
+#         robot = Robot(RectangularRoom(5,8), 1.0)
+#         robot.getRobotPosition()
+#         loop 5 times: 
+#             * Generate random x, y values
+#             * Check if Position(x,y) is in the room
+#                 * If so, robot.setRobotPosition(Position(x, y))
+#                 * robot.getRobotPosition()
+# Output:
+# Random position 0: (4.00, 4.00)
+# (4.00, 4.00)
+# Random position 1: (2.00, 8.00)
+# Random position 2: (5.00, 4.00)
+# Random position 3: (1.00, 2.00)
+# (1.00, 2.00)
+# Random position 4: (3.00, 3.00)
+# (3.00, 3.00)
+
+# Test 5 test setRobotDirection
+#         robot = Robot(RectangularRoom(5,8), 1.0)
+#         robot.getRobotDirection()
+#         loop 10 times: 
+#             * Generate random direction value
+#             * robot.setRobotDirection(randDirection)
+#             * robot.getRobotDirection()
+# Output:
+# Test passed
+# Random direction: 20
+# 20
+# Random direction: 81
+# 81
+# Random direction: 266
+# 266
+# Random direction: 24
+# 24
+# Random direction: 109
+# 109
+# Random direction: 145
+# 145
+# Random direction: 138
+# 138
+# Random direction: 25
+# 25
+# Random direction: 332
+# 332
+# Random direction: 65
+# 65
 
 # === Problem 3
 class StandardRobot(Robot):
@@ -262,11 +337,91 @@ class StandardRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        raise NotImplementedError
+        # raise NotImplementedError
+        newPosition = self.position.getNewPosition(self.direction, self.speed)
+        if self.room.isPositionInRoom(newPosition):
+            self.position = newPosition
+            self.room.cleanTileAtPosition(self.position)
+        else:
+            self.direction = random.randint(0, 360)
+    
+# Test: 1 class creation
+        # robot = StandardRobot(RectangularRoom(1,2), 1.0)
+
+# Test: 2 test setRobotPosition
+#         robot = StandardRobot(RectangularRoom(5,8), 1.0)
+#         robot.getRobotPosition()
+#         loop 5 times: 
+#             * Generate random x, y values
+#             * Check if Position(x,y) is in the room
+#                 * If so, robot.setRobotPosition(Position(x, y))
+#                 * robot.getRobotPosition()
+# Output:
+# Random position 0: (4.00, 1.00)
+#    In room; setting position. Position is now: (4.00, 1.00)
+# Random position 1: (1.00, 3.00)
+#    In room; setting position. Position is now: (1.00, 3.00)
+# Random position 2: (4.00, 2.00)
+#    In room; setting position. Position is now: (4.00, 2.00)
+# Random position 3: (2.00, 7.00)
+#    In room; setting position. Position is now: (2.00, 7.00)
+# Random position 4: (5.00, 8.00)
+
+# Test: 3 test setRobotDirection
+#         robot = StandardRobot(RectangularRoom(5,8), 1.0)
+#         robot.getRobotDirection()
+#         loop 10 times: 
+#             * Generate random direction value
+#             * robot.setRobotDirection(randDirection)
+#             * robot.getRobotDirection()
+# Output:
+# Random direction: 293
+#   Setting direction. Direction is now: 293
+# Random direction: 283
+#   Setting direction. Direction is now: 283
+# Random direction: 40
+#   Setting direction. Direction is now: 40
+# Random direction: 10
+#   Setting direction. Direction is now: 10
+# Random direction: 227
+#   Setting direction. Direction is now: 227
+# Random direction: 23
+#   Setting direction. Direction is now: 23
+# Random direction: 26
+#   Setting direction. Direction is now: 26
+# Random direction: 314
+#   Setting direction. Direction is now: 314
+# Random direction: 284
+#   Setting direction. Direction is now: 284
+# Random direction: 14
+#   Setting direction. Direction is now: 14
+
+# Test: 4 test updatePositionAndClean
+#         Test StandardRobot.updatePositionAndClean() 
+
+# Output:
+# Creating room and robot...
+# Setting position and direction to Position(1.5, 2.5) and 90...
+# Calling updatePositionAndClean(); robot speed is 1.0
+# Passed; now calling updatePositionAndClean() 20 times
+# Passed test.
+
+# #Test: 5 test updatePositionAndClean
+#         Test StandardRobot.updatePositionAndClean() 
+
+# Output:
+# Creating randomly sized room: 7x7 - and robot at speed 0.61...
+# Robot initalized at random position
+# Was initial position cleaned? True
+# Robot initalized at random direction:
+# Number of cleaned tiles: 1
+
+# Calling updatePositionAndClean() 30 times...
+# Cleaned the minimum number of tiles; test passed.
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-##testRobotMovement(StandardRobot, RectangularRoom)
+# testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4
@@ -288,10 +443,28 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     robot_type: class of robot to be instantiated (e.g. StandardRobot or
                 RandomWalkRobot)
     """
-    raise NotImplementedError
+    # raise NotImplementedError
+    r=robot_type
+    timeSteps = []
+    for i in range(num_trials):
+        room = RectangularRoom(width, height)
+        robots = [r(room, speed) for i in range(num_robots)]
+        steps = 0
+        anim = ps2_visualize.RobotVisualization(num_robots, width, height) # Initialize the visualization
+        # anim = ps2_visualize.RobotVisualization(num_robots, width, height, 0.01) #faster visualization
+        while room.getNumCleanedTiles() / room.getNumTiles() < min_coverage:
+            for robot in robots:
+                anim.update(room, robots)# Update the visualization
+                robot.updatePositionAndClean()
+            steps += 1
+        timeSteps.append(steps)
+    anim.done()# Close the visualization
+    return sum(timeSteps) / len(timeSteps)
 
 # Uncomment this line to see how much your simulation takes on average
-##print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+# print(runSimulation(1, 1.0, 5, 5, 0.78, 30, StandardRobot))
+
 
 
 # === Problem 5
@@ -307,8 +480,83 @@ class RandomWalkRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        raise NotImplementedError
+        # raise NotImplementedError
+        newPosition = self.position.getNewPosition(self.direction, self.speed)
+        if self.room.isPositionInRoom(newPosition):
+            self.position = newPosition
+            self.room.cleanTileAtPosition(self.position)
+            self.direction = random.randint(0, 360)
+        else:
+            self.direction = random.randint(0, 360)
+        
 
+# Test: 1 setRobotPosition
+#         robot = RandomWalkRobot(RectangularRoom(4, 9), 1.0)
+#         robot.getRobotPosition()
+#         loop 5 times: 
+#             * Generate random x, y values
+#             * Check if Position(x,y) is in the room
+#                 * If so, robot.setRobotPosition(Position(x, y))
+#                 * robot.getRobotPosition()
+# Output:
+# Random position 0: (4.00, 9.00)
+# Random position 1: (4.00, 7.00)
+# Random position 2: (2.00, 9.00)
+# Random position 3: (3.00, 1.00)
+#   In room; setting position. Position is now: (3.00, 1.00)
+# Random position 4: (2.00, 5.00)
+#   In room; setting position. Position is now: (2.00, 5.00)
+
+# Test: 2 test setRobotDirection
+#         robot = RandomWalkRobot(RectangularRoom(5,8), 1.0)
+#         robot.getRobotDirection()
+#         loop 10 times: 
+#             * Generate random direction value
+#             * robot.setRobotDirection(randDirection)
+#             * robot.getRobotDirection()
+# Output:
+# Random direction: 39
+#    Setting direction: 39
+# Random direction: 267
+#    Setting direction: 267
+# Random direction: 265
+#    Setting direction: 265
+# Random direction: 103
+#    Setting direction: 103
+# Random direction: 61
+#    Setting direction: 61
+# Random direction: 144
+#    Setting direction: 144
+# Random direction: 17
+#    Setting direction: 17
+# Random direction: 163
+#    Setting direction: 163
+# Random direction: 34
+#    Setting direction: 34
+# Random direction: 59
+#    Setting direction: 59
+
+# Test: 3 test updatePositionAndClean
+#         Test RandomWalkRobot.updatePositionAndClean() 
+# Output:
+# Creating room and robot...
+# Setting position and direction to Position(1.5, 2.5) and 90...
+# Calling updatePositionAndClean(); robot speed is 1.0
+# Passed; now calling updatePositionAndClean() 20 times
+# Passed test.
+
+# Test: 4 test updatePositionAndClean
+#         Test RandomWalkRobot.updatePositionAndClean() 
+
+# Output:
+# Creating randomly sized room: 9x10 - and robot at speed 0.92...
+# Robot initalized at random position
+# Was initial position cleaned? True
+# Robot initalized at random direction
+# Number of cleaned tiles: 1
+
+# Calling updatePositionAndClean() 30 times...
+# Cleaned the minimum number of tiles; test passed.
 
 def showPlot1(title, x_label, y_label):
     """
@@ -329,6 +577,12 @@ def showPlot1(title, x_label, y_label):
     pylab.ylabel(y_label)
     pylab.show()
 
+# Best title?
+#Time It Takes 1 - 10 Robots To Clean 80% Of A Room
+# Best x axis label?
+#Number of Robots
+# Best y axis label?
+#Time-steps
     
 def showPlot2(title, x_label, y_label):
     """
@@ -350,7 +604,13 @@ def showPlot2(title, x_label, y_label):
     pylab.xlabel(x_label)
     pylab.ylabel(y_label)
     pylab.show()
-    
+
+# Best title?
+#Not sure...
+# Best x axis label?
+#Aspect ratio
+# Best y axis label?
+#Time-steps
 
 # === Problem 6
 # NOTE: If you are running the simulation, you will have to close it 

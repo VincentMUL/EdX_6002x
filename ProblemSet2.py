@@ -162,3 +162,166 @@
 
 # Enter your code for classes RectangularRoom (from the previous problem) 
 # and Robot below.
+
+# Problem 3: StandardRobot Class
+# Each robot must also have some code that tells it how to move about a room, 
+# which will go in a method called updatePositionAndClean.
+
+# Ordinarily we would consider putting all the robot's methods in a single class. 
+# However, later in this problem set we'll consider robots with alternate movement strategies, 
+# to be implemented as different classes with the same interface. 
+# These classes will have a different implementation of updatePositionAndClean 
+# but are for the most part the same as the original robots. 
+# Therefore, we'd like to use inheritance to reduce the amount of duplicated code.
+
+# We have already refactored the robot code for you into two classes: 
+# the Robot class you completed in Problem 2 (which contains general robot code), 
+# and a StandardRobot class that inherits from it (which contains its own movement strategy).
+
+# Complete the updatePositionAndClean method of StandardRobot to simulate the motion of 
+# the robot after a single time-step (as described on the Simulation Overview page).
+
+class StandardRobot(Robot):
+    """
+    A StandardRobot is a Robot with the standard movement strategy.
+
+    At each time-step, a StandardRobot attempts to move in its current direction; when
+    it hits a wall, it chooses a new direction randomly.
+    """
+    def updatePositionAndClean(self):
+        """
+        Simulate the passage of a single time-step.
+
+        Move the robot to a new position and mark the tile it is on as having
+        been cleaned.
+        """
+
+# We have provided the getNewPosition method of Position, which you may find helpful:
+
+class Position(object):
+
+    def getNewPosition(self, angle, speed):
+        """
+        Computes and returns the new Position after a single clock-tick has
+        passed, with this object as the current position, and with the
+        specified angle and speed.
+
+        Does NOT test whether the returned position fits inside the room.
+
+        angle: number representing angle in degrees, 0 <= angle < 360
+        speed: positive float representing speed
+
+        Returns: a Position object representing the new position.
+        """
+# Note: You can pass in an integer or a float for the angle parameter.
+
+# Before moving on to Problem 4, check that your implementation of StandardRobot works 
+# by uncommenting the following line under your implementation of StandardRobot. 
+# Make sure that as your robot moves around the room, the tiles it traverses switch colors from gray to white. 
+# It should take about a minute for it to clean all the tiles.
+
+# testRobotMovement(StandardRobot, RectangularRoom)
+
+# Problem 4: Running the Simulation
+# 
+# In this problem you will write code that runs a complete robot simulation.
+# Recall that in each trial, the objective is to determine how many time-steps 
+# are on average needed before a specified fraction of the room has been cleaned. 
+# Implement the following function:
+# def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
+#                   robot_type):
+#     """
+#     Runs NUM_TRIALS trials of the simulation and returns the mean number of
+#     time-steps needed to clean the fraction MIN_COVERAGE of the room.
+
+#     The simulation is run with NUM_ROBOTS robots of type ROBOT_TYPE, each with
+#     speed SPEED, in a room of dimensions WIDTH x HEIGHT.
+#     """
+# The first six parameters should be self-explanatory. 
+# For the time being, you should pass in StandardRobot for the robot_type parameter, like so:
+avg = runSimulation(10, 1.0, 15, 20, 0.8, 30, StandardRobot)
+# Then, in runSimulation you should use robot_type(...) instead of StandardRobot(...) 
+# whenever you wish to instantiate a robot. 
+# (This will allow us to easily adapt the simulation to run with different robot implementations, 
+# which you'll encounter in Problem 6.)
+# Feel free to write whatever helper functions you wish.
+# We have provided the getNewPosition method of Position, which you may find helpful:
+class Position(object):
+
+    def getNewPosition(self, angle, speed):
+        """
+        Computes and returns the new Position after a single clock-tick has
+        passed, with this object as the current position, and with the
+        specified angle and speed.
+
+        Does NOT test whether the returned position fits inside the room.
+
+        angle: integer representing angle in degrees, 0 <= angle < 360
+        speed: positive float representing speed
+
+        Returns: a Position object representing the new position.
+        """
+# For your reference, here are some approximate room cleaning times. 
+# These times are with a robot speed of 1.0.
+
+# One robot takes around 150 clock ticks to completely clean a 5x5 room.
+
+# One robot takes around 190 clock ticks to clean 75% of a 10x10 room.
+
+# One robot takes around 310 clock ticks to clean 90% of a 10x10 room.
+
+# One robot takes around 3322 clock ticks to completely clean a 20x20 room.
+
+# Three robots take around 1105 clock ticks to completely clean a 20x20 room.
+
+# (These are only intended as guidelines. 
+# Depending on the exact details of your implementation, 
+# you may get times slightly different from ours.)
+
+# You should also check your simulation's output for speeds other than 1.0. 
+# One way to do this is to take the above test cases, change the speeds, and make sure the results are sensible.
+# For further testing, see the next page in this problem set about the optional way to use visualization methods. 
+# Visualization will help you see what's going on in the simulation and may assist you in debugging your code.
+
+# Enter your code for the definition of runSimulation below.
+
+# Problem 5: RandomWalkRobot Class
+
+# iRobot is testing out a new robot design. 
+# The proposed new robots differ in that they change direction randomly after every time step, 
+# rather than just when they run into walls. You have been asked to design a simulation to determine what effect, 
+# if any, this change has on room cleaning times.
+#
+# Write a new class RandomWalkRobot that inherits from Robot (like StandardRobot) 
+# but implements the new movement strategy. RandomWalkRobot should have the same interface as StandardRobot.
+#
+# Test out your new class. 
+# Perform a single trial with the StandardRobot implementation and watch the visualization 
+# to make sure it is doing the right thing. Once you are satisfied, 
+# you can call runSimulation again, passing RandomWalkRobot instead of StandardRobot.
+#
+# Enter your code for classes Robot and RandomWalkRobot below.
+
+# Problem 6: Data Plotting
+# Now, you'll use your simulation to answer some questions about the robots' performance.
+
+# In order to do this problem, you will be using a Python tool called PyLab. 
+
+# Below is an example of a plot. 
+# This plot does not use the same axes that your plots will use; 
+# it merely serves as an example of the types of images that the PyLab package produces.
+# Note to those who did the optional visualization: 
+# For problem 6, we make calls to runSimulation() to get simulation data and plot it. 
+# However, you don't want the visualization getting in the way. 
+# If you chose to do the visualization exercise, before you get started on problem 6 
+# (and before you submit your code in submission boxes), 
+# make sure to comment the visualization code out of runSimulation(). 
+# There should be 3 lines to comment out. If you do not comment these lines, 
+# your code will take a REALLY long time to run!
+
+# For the questions below, call the given function with the proper arguments to generate a plot using PyLab.
+
+# Examine showPlot1 in ps2.py, which takes in the parameters title, x_label, and y_label. 
+# Your job is to examine the code and figure out what the plot produced by the function tells you. 
+# Try calling showPlot1 with appropriate arguments to produce a few plots. 
+# Then, answer the following 3 questions.
