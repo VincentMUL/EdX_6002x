@@ -474,8 +474,8 @@ class DDrunk(Drunk):
 
 # Problem 7
 
-# Write a function that meets the specification below:
 
+# Write a function that meets the specification below:
 def solveit(test):
     """ test, a function that takes an int parameter and returns a Boolean
         Assumes there exists an int, x, such that test(x) is True
@@ -483,16 +483,25 @@ def solveit(test):
         In case of ties, return any one of them. 
     """
     # IMPLEMENT THIS FUNCTION
+    x = 0
+    while True:
+        if x==1000:
+            break
+        elif test(x):
+            return x
+        elif test(-x):
+            return -x
+        x += 1
+    
+# #### This test case prints 49 ####
+# def f(x):
+#     return (x+15)**0.5 + x**0.5 == 15
+# print(solveit(f))
 
-#### This test case prints 49 ####
-def f(x):
-    return (x+15)**0.5 + x**0.5 == 15
-print(solveit(f))
-
-#### This test case prints 0 ####
-def f(x):
-    return x == 0
-print(solveit(f))
+# #### This test case prints 0 ####
+# def f(x):
+#     return x == 0
+# print(solveit(f))
 
 # You are not allowed to import anything. Do not leave any debugging print stataments. 
 # Click "See full output" to see the test cases passed/failed.
