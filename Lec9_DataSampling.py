@@ -37,12 +37,13 @@
 
 import pylab, random, numpy
 
-def makeHist(data, title, xlabel, ylabel, bins = 20):
+def makeHist(data, title, xlabel, ylabel, bins = 20, show = True):
     pylab.hist(data, bins = bins)
     pylab.title(title)
     pylab.xlabel(xlabel)
     pylab.ylabel(ylabel)
-    pylab.show()
+    if show:
+        pylab.show()
 
 def getHighs(): #read in data from file
     inFile = open('temperatures.csv')
@@ -77,10 +78,16 @@ def getMeansAndSDs(population, sample, verbose = False):# takes population and s
 #random.sample(population, sampleSize) returns a list containing sampleSize 
 #randomly chosen distinct elements of population -> sampling without replacement!
 
-random.seed(0)
-population = getHighs()
-sample = random.sample(population, 100)
-getMeansAndSDs(population, sample, True)
+if __name__ == '__main__':
+    random.seed(0)
+    population = getHighs()
+    sample = random.sample(population, 100)
+    getMeansAndSDs(population, sample, True)
+
+# random.seed(0)
+# population = getHighs()
+# sample = random.sample(population, 100)
+# getMeansAndSDs(population, sample, True)
 # stdev is about 58% of the mean. This is a large stdev!
 # Why? Because of the difference in place, but also month.
 # We're going to think about how to get a good approximation without looking at all
