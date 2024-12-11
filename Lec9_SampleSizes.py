@@ -232,7 +232,7 @@ def compareDists():
     plotDiffs(sampleSizes, ediffs, 'Sample SD vs. Population SD', 'Exponential population')
     pylab.show()
 
-compareDists()
+# compareDists()
 # We can see the distribution does matter, less difference in SD sample - pop
 # for non-skewed distributions.
 # For population size, it doesn't matter, good news!
@@ -245,4 +245,117 @@ compareDists()
 # 5. Use SEM to generate CI around the sample mean.
 # This works great for independent random samples!
 # Next what happens when we get that wrong.
-# Try it out on temperature example.
+# Try it out computationally on temperature example.
+# Are 200 samples enough?
+random.seed(0)
+temps = getHighs()
+popMean = sum(temps)/len(temps)
+sampleSize = 200
+numTrials = 10000
+numBad = 0
+# for t in range(numTrials):
+#     sample = random.sample(temps, sampleSize)
+#     sampleMean = sum(sample)/sampleSize
+#     se = numpy.std(sample)/(sampleSize**0.5)
+#     if abs(popMean - sampleMean) > 1.96*se:
+#         numBad += 1
+# print('Fraction outside 95% Confidence Interval =', numBad/numTrials)
+# prints number of samples that were outside 1.96*standard errors of population mean
+# Fraction outside 95% Confidence Interval = 0.0536
+# about 5% of the time, the sample mean will be outside the 95% CI
+#
+# What happens if we don't sample properly?
+for t in range(numTrials):
+    posStartingPts = range(0, len(temps) - sampleSize)
+    start = random.choice(posStartingPts)#randomly choose a starting point
+    sample = temps[start:start + sampleSize]#next take the next 200 samples
+    sampleMean = sum(sample)/sampleSize
+    se = numpy.std(sample)/(sampleSize**0.5)
+    if abs(popMean - sampleMean) > 1.96*se:
+        numBad += 1
+# print('Fraction outside 95% Confidence Interval =', numBad/numTrials)
+# Fraction outside 95% Confidence Interval = 0.8906
+# about 90% of the time, the sample mean will be outside the 95% CI
+# Has theory failed us? No, we failed the theory.
+# Data in our file is organized by city (all Phoenix are together, etc)
+# and temperature are correlated with cities. Therefore examples are
+# not chosen independent of each other.
+# Not always obvious how to get independent samples.
+# Important: All theoretical results are based on assumptions!
+#            We always need to check the assumptions.
+#            Failure to check these assumptions lies at the root of 
+#            many statistical errors and bad conclusions.
+
+# EXERCISE 4:
+# Ace, Bree, and Chad are each tasked with finding the standard error for three different problems. 
+# Each person only has a sample size of 100 data points for each of their problem.
+# Ace: the winning bonus number in the lottery
+# Bree: the average women's shoe size
+# Chad: the number of mold bacteria on bread over time
+# 1. Which person's sample standard deviation will be the closest to the actual population standard deviation?
+#   Ace, because the lottery is random and the distribution is uniform.
+# 2. Which person's sample standard deviation will be the farthest to the actual population standard deviation?
+#   Chad, because the distribution is exponential and skewed.
+# 3. Now suppose Chad used a sample size of 10,000 instead of 100 but the other two people 
+#    still use a sample size of 100. Mark all that are correct.
+    # A. The difference between the sample standard deviation and actual population standard deviation 
+    #    for the mold problem decreases.
+    # B. The difference between the sample standard deviation and actual population standard deviation 
+    #    for the mold problem is now less than the difference between the sample standard deviation 
+    #    and actual population standard deviation for the shoe problem.
+    # C. The difference between the sample standard deviation and actual population standard deviation 
+    #    for the mold problem is now less than the difference between the sample standard deviation and 
+    #    actual population standard deviation for the lottery problem.
+# Answer: A
+# The more samples you take, you will get closer to the actual population, so the difference in stddevs decreases. 
+# Without knowing exactly how to model the curves of the difference in sample stddev and the population stddev, 
+# you can't tell how the mold stddev difference behaves relative to the shoe and lottery stddevs.
+
+# EXERCISE 5:
+# You are given two data files. Each file contains 1800 data points measuring the heart rate 
+# (in beats per minute, every 0.5 seconds) of a subject prforming comparable activities for the duration of 15 minutes: 
+# hr1.txt and hr2.txt. 
+# The data is plotted in the figures below. (note that the data is taken from the MIT-BIH Database)
+# Vizualize these files with a plot after importing the data with Time on x-axis and heart rate on y-axis.
+def read_numbers_from_file(file_path):
+    with open(file_path, 'r') as file:
+        numbers = [float(line.strip()) for line in file]
+    return numbers
+
+hrt1 = read_numbers_from_file('hr1.txt') 
+hrt2 = read_numbers_from_file('hr2.txt')
+# print(hrt1)
+# print(type(hrt1))
+pylab.plot(range(1800), hrt1)
+pylab.plot(range(1800), hrt2)
+pylab.xlabel('Time')
+pylab.ylabel('Heart Rate')
+pylab.legend(['hrt1', 'hrt2'])
+pylab.show()
+#hrt2 is kind of periodical and hrt1 is more random
+
+
+# Using a sample size of 250, decide whether the following methods of drawing samples will yield samples 
+# where the examples are independent of each other.
+# 
+# 1. Using random.sample, True or false? Without replacement!
+# Examples are independent in hr1 sample. Answer: True
+# Examples are independent in hr2 sample. Answer: True
+# 
+# 2. Getting a random number between 1 and 1800, 250 times.
+# Examples are independent in hr1 sample. Answer: False
+# Examples are independent in hr2 sample. Answer: False
+# Neither h1 nor h2 give independent examples. Answer: True
+# Because this method might get repeat values 
+# because it it performing selection with replacement
+# 
+# 3. Starting at the first example and going until the 500th example.
+# Examples are independent in hr1 sample. Answer: False
+# Examples are independent in hr2 sample. Answer: False
+# Neither h1 nor h2 give independent examples. Answer: True
+# Reasoning:
+# Looking at the data in h1, you can see that the samples from 0 to 250 are 
+# higher than the examples between 250 and 500. In the hr2 data, 
+# the examples occur with a frequency of 125, so taking the first 250 
+# and then the next 250 will give almost the same average but the 
+# standard deviation will be different.
