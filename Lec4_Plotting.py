@@ -236,6 +236,7 @@ def displayRetireWMonthlies(monthlies, rate, terms):
         xvals, yvals = retire(monthly, rate, terms)
         plt.plot(xvals, yvals, label = 'retire: €' + str(monthly))
         plt.legend()
+        print(f'Total sum for monthly savings of €{monthly} after {terms} months: €{yvals[-1]:.2f}')
     plt.show()
 
 def displayRetireWRates(month, rates, terms):
@@ -263,6 +264,9 @@ def displayRetireWMonthsRates(monthlies, rates, terms):
     plt.show()
 
 displayRetireWMonthlies([90, 200, 500, 750, 1000], 0.05, 25*12)
+
+displayRetireWMonthlies([85], 0.15, 25*12) # if "15% rendement" on my Argenta account is true...
+displayRetireWMonthlies([85], 0.15, 55) #just checking if same above, what would look like today.
 
 # displayRetireWRates(500, [0.03, 0.05, 0.07], 25*12)
 
